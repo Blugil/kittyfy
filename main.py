@@ -7,19 +7,30 @@ import os
 #adjust size of tui
 #pipe size of contents variable into select size of tui
 #readJson function picks from selected file in tui
-
-
+#actually pipe the theme from selected theme into a variable
 
 def readDirectory(filepath):
     try:
         contents = os.listdir(filepath)
+        themePaths = []
+        
         for i in contents:
-            print(i)
-            return os.path.join(filepath, i)
+            themePaths.append(os.path.join(filepath, i))
+
+        return themePaths
+
     except:
         print("directory does not exist")
         return
 
+def nameParser(list):
+    
+    themeNames = []
+    for string in list:
+        themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
+
+    return themeNames
+    
 
 def readJson(filename):
     if filename:
@@ -35,17 +46,23 @@ class App(npyscreen.NPSApp):
 
     def main(self):
         F = npyscreen.Form(name = "Hello World!",)
-        F.add(npyscreen.TitleSelectOne, 
-                max_height=(len(themes)+1), 
+        select = F.add(npyscreen.TitleSelectOne, 
+                max_height=(len(self.themes)+1), 
                 value = [0,], 
                 name = "Select Theme",
-                values = themes)
+                values = nameParser(self.themes))
         F.edit()
+        
+        selectedTheme = {
+            "test":select.get_selected_objects()
+        }
+
+        with open("test.json", 'w') as file:
+            json.dump(selectedTheme, file)
+
 
 if __name__ == "__main__":
     
-    readJson(readDirectory("./themes"))
-    # readJson()
-    themes = ["Nord", "Gruvbox", "Solarized", "One Dark"]
-    app = App(themes)
-    # app.run()
+    # themes = ["Nord", "Gruvbox", "Solarized", "One Dark"]
+    app = App(readDirectory("./themes"))
+    app.run()
