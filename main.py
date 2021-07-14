@@ -13,31 +13,45 @@ def readDirectory(filepath):
     try:
         contents = os.listdir(filepath)
         themePaths = []
-        
         for i in contents:
             themePaths.append(os.path.join(filepath, i))
-
         return themePaths
 
     except:
-        print("directory does not exist")
-        return
+        return []
 
 def nameParser(list):
     
-    themeNames = []
-    for string in list:
-        themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
-
-    return themeNames
+    if list:
+        themeNames = []
+        for string in list:
+            themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
+        return themeNames
+    else:
+        return []
     
 
-def readJson(filename):
+def readSelected(filename):
     if filename:
         data = json.load(open(filename,'r'))
-        print(data)
+        key = list(data.keys())
+
+        #terrible code lol, json field saves as list with one value for some reason
+        string = data[key[0]][0]
+        return string
     else:
-        print("download a theme!")
+        return ""
+
+
+def startSelect(data, selected):
+    if data:
+        for i, value in enumerate(data):
+            print(value)
+            if selected in value:
+               return i
+        return 0
+    else:
+        return 0 
 
 
 class App(npyscreen.NPSApp):
@@ -45,16 +59,17 @@ class App(npyscreen.NPSApp):
         self.themes = themes
 
     def main(self):
+
         F = npyscreen.Form(name = "Hello World!",)
         select = F.add(npyscreen.TitleSelectOne, 
                 max_height=(len(self.themes)+1), 
-                value = [0,], 
+                value = [startSelect(readDirectory("./themes"), readSelected("./test.json")),],
                 name = "Select Theme",
                 values = nameParser(self.themes))
         F.edit()
         
         selectedTheme = {
-            "test":select.get_selected_objects()
+            "selected_theme":select.get_selected_objects()
         }
 
         with open("test.json", 'w') as file:
@@ -62,7 +77,6 @@ class App(npyscreen.NPSApp):
 
 
 if __name__ == "__main__":
-    
-    # themes = ["Nord", "Gruvbox", "Solarized", "One Dark"]
+
     app = App(readDirectory("./themes"))
     app.run()
