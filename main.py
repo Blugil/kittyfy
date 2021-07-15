@@ -3,25 +3,21 @@ import npyscreen
 import json
 import os
 
-#TODO:
-#adjust size of tui
-#pipe size of contents variable into select size of tui
-#readJson function picks from selected file in tui
-#actually pipe the theme from selected theme into a variable
-
-def readDirectory(filepath):
+# returns a list of directory contents
+def readDir(filepath):
     try:
         contents = os.listdir(filepath)
         themePaths = []
         for i in contents:
             themePaths.append(os.path.join(filepath, i))
-        return themePaths
 
+        return themePaths
     except:
         return []
 
+
+# returns a list of filenames from pilepaths
 def nameParser(list):
-    
     if list:
         themeNames = []
         for string in list:
@@ -29,24 +25,25 @@ def nameParser(list):
         return themeNames
     else:
         return []
-    
 
+
+# checks selected storage file to return a string of previously selected option
+# needs refactor
 def readSelected(filename):
     if filename:
         data = json.load(open(filename,'r'))
-        key = list(data.keys())
 
         #terrible code lol, json field saves as list with one value for some reason
-        string = data[key[0]][0]
+        string = data["selected_theme"]
         return string
     else:
         return ""
 
-
+# returns index of selected theme
 def startSelect(data, selected):
     if data:
         for i, value in enumerate(data):
-            print(value)
+            print(selected, value)
             if selected in value:
                return i
         return 0
@@ -59,24 +56,31 @@ class App(npyscreen.NPSApp):
         self.themes = themes
 
     def main(self):
+       
+        value = []
+        if (len(self.themes)) > 0:
+            value = [startSelect(readDir("./themes"), readSelected("./test.json")),] 
+        else:
+            value = None
 
-        F = npyscreen.Form(name = "Hello World!",)
-        select = F.add(npyscreen.TitleSelectOne, 
-                max_height=(len(self.themes)+1), 
-                value = [startSelect(readDirectory("./themes"), readSelected("./test.json")),],
-                name = "Select Theme",
-                values = nameParser(self.themes))
+        name =  "Select Theme" if len(self.themes) > 0 else "No Themes"
+        values = nameParser(self.themes)
+
+        F = npyscreen.Form(name = "Kitty Theme",)
+        select = F.add(npyscreen.TitleSelectOne, max_height=(len(self.themes)+2), value = value, name = name, values = values)
+
         F.edit()
         
-        selectedTheme = {
-            "selected_theme":select.get_selected_objects()
-        }
-
-        with open("test.json", 'w') as file:
-            json.dump(selectedTheme, file)
+        # write selected theme to file
+        if len(self.themes) > 0:
+            selectedTheme = {
+                "selected_theme":select.get_selected_objects()[0]
+            }
+            with open("test.json", 'w') as file:
+                json.dump(selectedTheme, file)
 
 
 if __name__ == "__main__":
-
-    app = App(readDirectory("./themes"))
+    
+    app = App(readDir("./themes"))
     app.run()
