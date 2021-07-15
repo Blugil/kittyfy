@@ -81,6 +81,6 @@ class App(npyscreen.NPSApp):
 
 
 if __name__ == "__main__":
-    
+
     app = App(readDir("./themes"))
     app.run()
