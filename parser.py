@@ -39,31 +39,35 @@ def parseKitty():
     else:
         return
 
-#TODO: make sure validation works even if out of order
-# rethink this functions purpose, do we want to enable themes to set only
-# the values within the theme or be required to set all values
-def validateTheme(filename):
-    
-    # this is lazy programming, other file already has a load fn
-    # just for test do NOT use in prod, no need to open files twice
-    data = json.load(open(filename, 'r'))
+def validateTheme(data: dict):
+
     theme_keys = list(data.keys())
 
-    # temp proof of concept
-    colors = ['hello', 'test'] 
+    # available kitty color theming options
+    kitty_theme_options = ['color0','color1','color2','color3','color4','color5','color6','color7','color8', 'color9','color10','color11','color12','color13','color14','color15','background', 'foreground', 'selection_background', 'selection_foreground']
 
-    ## checks to make sure all required colors are in the theme.json file
-    for i, color in enumerate(colors):
-        try:
-            print(theme_keys[i], color)
-            if theme_keys[i] != color:
+    check_theme = 0
+    validated_theme = len(theme_keys)
+
+    # checks that all options in theme.json file are valid
+    for i in range(len(theme_keys)):
+        for option in kitty_theme_options:
+            try:
+                if theme_keys[i] == option:
+                    check_theme += 1
+                    break
+            except:
+                print('Exception handled')
                 return False
-        except:
-            print('Exception handled')
-            return False
-    return True
-    
+    if check_theme == validated_theme:
+        return True
+    else:
+        return False
+
 
 if __name__ == "__main__":
     # parseKitty()
-    print(validateTheme('./themes/gruvbox.json'))
+    data = json.load(open('./themes/gruvbox.json', 'r'))
+    print(validateTheme(data))
+
+
