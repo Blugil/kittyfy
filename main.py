@@ -3,6 +3,19 @@ import npyscreen
 import json
 import os
 
+
+# returns a list of filenames from pilepaths
+def nameParser(list):
+    if list:
+        themeNames = []
+        for string in list:
+            themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
+        return themeNames
+    else:
+        return []
+
+# -------------------Filesystem related stuff--------------------
+
 # returns a list of directory contents
 def readDir(filepath):
     try:
@@ -15,18 +28,6 @@ def readDir(filepath):
     except:
         return []
 
-
-# returns a list of filenames from pilepaths
-def nameParser(list):
-    if list:
-        themeNames = []
-        for string in list:
-            themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
-        return themeNames
-    else:
-        return []
-
-
 # checks selected storage file to return a string of previously selected option
 # needs refactor
 def readSelected(filename):
@@ -38,6 +39,7 @@ def readSelected(filename):
         return string
     else:
         return ""
+
 
 # returns index of selected theme
 def startSelect(data, selected):

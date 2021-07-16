@@ -1,4 +1,7 @@
-def parser():
+import json
+
+
+def parseKitty():
     
     # successfully parses my kitty conf file, just gotta work on changing it now
     # kitty = open("./kitty.conf", "wt")
@@ -37,6 +40,28 @@ def parser():
         return
 
 
+def validateTheme(filename):
+    
+    # this is lazy programming, other file already has a load fn
+    # just for test do NOT use in prod, no need to open files twice
+    data = json.load(open(filename, 'r'))
+    keys = list(data.keys())
+
+    # temp proof of concept
+    colors = ['hello', 'test'] 
+
+    ## checks to make sure all required colors are in the theme.json file
+    for i, color in enumerate(colors):
+        try:
+            print(keys[i], color)
+            if keys[i] != color:
+                return False
+        except:
+            print('Exception handled')
+            return False
+    return True
+    
 
 if __name__ == "__main__":
-    parser()
+    # parseKitty()
+    print(validateTheme('./themes/gruvbox.json'))
