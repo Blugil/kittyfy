@@ -1,6 +1,8 @@
 import json
 
 
+# figure out what this returns (a dict with line numbers corresponding to settings perhaps?)
+# need to figure out the flow of this project before I continue I feel.
 def parseKitty():
     
     # successfully parses my kitty conf file, just gotta work on changing it now
@@ -39,6 +41,15 @@ def parseKitty():
     else:
         return
 
+def nameSplitter(paths: list):
+    if paths:
+        themeNames = []
+        for string in paths:
+            themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
+        return themeNames
+    else:
+        return []
+
 def validateTheme(data: dict):
 
     theme_keys = list(data.keys())
@@ -63,6 +74,13 @@ def validateTheme(data: dict):
         return True
     else:
         return False
+
+def replace(theme: dict):
+    if not validateTheme(theme):
+        return 0 
+
+    else: 
+        return 1
 
 
 if __name__ == "__main__":
