@@ -41,6 +41,16 @@ def parseKitty():
     else:
         return
 
+def startSelect(data, selected):
+    if data:
+        for i, value in enumerate(data):
+            print(selected, value)
+            if selected in value:
+               return i
+        return 0
+    else: 
+        return 0
+
 def nameSplitter(paths: list):
     if paths:
         themeNames = []
@@ -75,12 +85,6 @@ def validateTheme(data: dict):
     else:
         return False
 
-def replace(theme: dict):
-    if not validateTheme(theme):
-        return 0 
-
-    else: 
-        return 1
 
 
 if __name__ == "__main__":

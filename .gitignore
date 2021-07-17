@@ -1,5 +1,6 @@
 /env
-test.json
-theme.conf
-kitty.conf
 /themes
+/__pycache__
+kitty.conf
+theme.conf
+test.json
