@@ -1,8 +1,9 @@
 import json
 
+kitty_theme_options = ['color0','color1','color2','color3','color4','color5','color6','color7','color8', 'color9','color10','color11','color12','color13','color14','color15','background', 'foreground', 'selection_background', 'selection_foreground']
 
-# figure out what this returns (a dict with line numbers corresponding to settings perhaps?)
-# need to figure out the flow of this project before I continue I feel.
+# parseKitty needs to only examine and record *possible* options, without expecting all color 
+# sets to be there per new ideas. need to check in a smilar fashion to validateTheme()
 def parseKitty():
     
     # successfully parses my kitty conf file, just gotta work on changing it now
@@ -15,6 +16,9 @@ def parseKitty():
         line_count = 0
 
         initial_color = 0
+        final_color = 0
+
+        non_color_options = kitty_theme_options[-4:]
         
         # runs through 
         while cond: 
@@ -30,7 +34,9 @@ def parseKitty():
             elif color in line:
                 if color_count == 0:
                     initial_color = line_count
-
+                
+                elif line_count > final_color:
+                    final_color = line_count
                 color_count += 1
 
                 #removes \n just from print (keep it for actual file)
@@ -38,8 +44,10 @@ def parseKitty():
 
             elif color_count > 15:
                 cond = False
+        
+        return (initial_color, final_color)
     else:
-        return
+        return ()
 
 def startSelect(data, selected):
     if data:
@@ -65,7 +73,6 @@ def validateTheme(data: dict):
     theme_keys = list(data.keys())
 
     # available kitty color theming options
-    kitty_theme_options = ['color0','color1','color2','color3','color4','color5','color6','color7','color8', 'color9','color10','color11','color12','color13','color14','color15','background', 'foreground', 'selection_background', 'selection_foreground']
 
     check_theme = 0
     validated_theme = len(theme_keys)
@@ -88,8 +95,9 @@ def validateTheme(data: dict):
 
 
 if __name__ == "__main__":
-    # parseKitty()
-    data = json.load(open('./themes/gruvbox.json', 'r'))
-    print(validateTheme(data))
 
+    parse = parseKitty()
+    print(parse)
 
+    # data = json.load(open('./themes/gruvbox.json', 'r'))
+    # print(validateTheme(data))
