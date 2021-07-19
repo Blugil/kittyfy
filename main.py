@@ -4,6 +4,7 @@ import file
 
 if __name__ == "__main__":
 
+
     themes = file.readDir('./themes')
     selected = file.readSelected('./test.json')
 

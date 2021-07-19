@@ -34,5 +34,3 @@ def writeSelected(selected, filename):
     with open(filename, 'w') as file:
         json.dump(selectedTheme, file)
 
-def replace(theme: dict):
-    return theme
