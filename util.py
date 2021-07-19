@@ -2,9 +2,9 @@ kitty_theme_options = ['color0','color1','color2','color3','color4','color5','co
 
 # proof of concept parser that looks through a config file and prints (for now) each matching
 # option
-def parseKitty():
+def parseKitty(filename: str):
     
-    theme = open("theme.conf", "rt")
+    theme = open(filename, "rt")
 
     if theme:
         cond = True
@@ -28,16 +28,15 @@ def parseKitty():
                 cond = False
 
             line_count += 1
-
+        
+        theme.close()
         return color_positions
 
     else:
+        theme.close()
         return {}
 
 
-def replace(theme: dict):
-
-    return theme
 
 # gets the index of the selected theme 
 def startSelect(data, selected):
@@ -85,10 +84,51 @@ def validateTheme(data: dict):
     else:
         return False
 
+# stores only the lines not listed in line numbers
+def readKitty(filename: str):
+  
+    # grabs the array of line numbers needing to be replaced
+    line_numbers = parseKitty(filename)
+    line_numbers_array = line_numbers.values()
+
+    data = open(filename, 'rt')
+    
+    #read will return this
+    document = []
+
+    cond = True
+    current_line = 0
+
+    # adds line numbers not listed to array
+    while cond:
+
+        line = data.readline()
+
+        if line and current_line not in line_numbers_array:
+            document.append(line)
+
+        if not line:
+            cond = False
+
+        current_line += 1
+
+    return document
+
+
+def replace(kitty_config, new_theme: dict):
+    
+    # parse through the kitty config file first
+    current_kitty = parseKitty(kitty_config)
+    current_kitty_keys = current_kitty.keys() 
+    # open kitty config to append
+    kitty = open(kitty_config, 'ab')
+    
+
+
+    return 1
 
 if __name__ == "__main__":
 
-    print(parseKitty())
+    # print(parseKitty('./theme.conf'))
+    print(readKitty('./theme.conf'))
 
-    # data = json.load(open('./themes/gruvbox.json', 'r'))
-    # print(validateTheme(data))
