@@ -10,51 +10,31 @@ def parseKitty():
         cond = True
         line_count = 0
 
-        initial_color_line = 0
-        final_color_line = 0
+        color_positions = {}
 
-        initial_color = ''
-        final_color = ''
-
-        # runs through 
+        # checks all lines for matching theme options and stores line number
         while cond: 
 
             line = theme.readline()
-
-            # splits line into just theme option
             option = line.split(' ')[0]
-
-            line_count += 1
             
             if line:
                 for theme_option in kitty_theme_options:
-                    if theme_option == option and initial_color_line == 0:
-                        initial_color_line = line_count
-                        initial_color = option
-                        print(line.strip('\n'))
+                    if theme_option == option:
+                        color_positions[option] = line_count
                         break
-                    
-                    elif theme_option == option:
-                        print(line.strip('\n'))
-                        if line_count >= final_color_line:
-                            final_color_line = line_count
-                            final_color = option
-                        break
-
             else:     
+                theme.close()
                 cond = False
 
-        theme.close()
-        return {
-                initial_color: initial_color_line,
-                final_color: final_color_line
-                }
+            line_count += 1
+
+        return color_positions
 
     else:
-        theme.close()
         return {}
 
-# reads kitty file to change it
+
 def replace(theme: dict):
 
     return theme

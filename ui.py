@@ -14,6 +14,10 @@ class App(npyscreen.NPSApp):
         self.themes = themes
         self.selected_theme = selected
 
+    def edit(self, data):
+
+        return data
+
     def main(self):
        
         value = [0,]
@@ -36,9 +40,12 @@ class App(npyscreen.NPSApp):
                 values = values)
 
         F.edit()
+
+        selected = select.get_selected_objects()[0]
         
         # write selected theme to file
         if len_themes > 0:
             # get_selected_objects returns array and I want a string
-            file.writeSelected(select.get_selected_objects()[0], 'test.json')
-
+            file.writeSelected(selected, 'test.json')
+        
+        
