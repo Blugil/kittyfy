@@ -114,14 +114,12 @@ def readKitty(filename: str):
 
     return document
 
+# read the entire file into an array (like current readKitty but without avoiding reading some lines, then remove (or replace) the strings at certain indexes given as line numbers by the parseKitty(function), then just store the file
 
-def replace(kitty_config, new_theme: dict):
+def replace(new_kitty: list, new_theme: dict):
     
     # parse through the kitty config file first
-    current_kitty = parseKitty(kitty_config)
-    current_kitty_keys = current_kitty.keys() 
     # open kitty config to append
-    kitty = open(kitty_config, 'ab')
     
 
 
