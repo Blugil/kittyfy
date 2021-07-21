@@ -1,6 +1,5 @@
 import npyscreen
 import util
-import file
 
 
 # returns a list of filenames from pilepaths
@@ -46,6 +45,6 @@ class App(npyscreen.NPSApp):
         # write selected theme to file
         if len_themes > 0:
             # get_selected_objects returns array and I want a string
-            file.writeSelected(selected, 'test.json')
+            util.writeSelected(selected, 'test.json')
         
         

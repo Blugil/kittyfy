@@ -1,58 +1,42 @@
+import os
 import json
+import kitty
 
 
-kitty_theme_options = ['color0','color1','color2','color3','color4','color5','color6','color7','color8', 'color9','color10','color11','color12','color13','color14','color15','background', 'foreground', 'selection_background', 'selection_foreground']
+# -------------------Filesystem related stuff--------------------
 
-# proof of concept parser that looks through a config file and prints (for now) each matching
-# option
-def parseKitty(filename: str):
-    
-    theme = open(filename, "rt")
+# returns a list of directory contents
+def readDir(filepath):
+    try:
+        contents = os.listdir(filepath)
+        themePaths = []
+        for i in contents:
+            themePaths.append(os.path.join(filepath, i))
 
-    if theme:
-        cond = True
-        line_count = 0
+        return themePaths
+    except:
+        return []
 
-        color_positions = {}
+# checks selected storage file to return a string of previously selected option
+# needs refactor
+def readSelected(filename):
+    if filename:
+        data = json.load(open(filename,'r'))
 
-        # checks all lines for matching theme options and stores line number
-        while cond: 
-
-            line = theme.readline()
-            option = line.split(' ')[0]
-            
-            if line:
-                for theme_option in kitty_theme_options:
-                    if theme_option == option:
-                        color_positions[option] = line_count
-                        break
-            else:     
-                theme.close()
-                cond = False
-
-            line_count += 1
-        
-        theme.close()
-        return color_positions
-
+        #terrible code lol, json field saves as list with one value for some reason
+        string = data["selected_theme"]
+        return string
     else:
-        theme.close()
-        return {}
+        return ""
+
+def writeSelected(selected, filename):
+    selectedTheme = {
+        "selected_theme":selected
+    }
+    with open(filename, 'w') as file:
+        json.dump(selectedTheme, file)
 
 
-
-# gets the index of the selected theme 
-def startSelect(data, selected):
-    if data and selected:
-        for i, value in enumerate(data):
-            print(selected, value)
-            if selected in value:
-               return i
-        return 0
-    else: 
-        return 0
-
-# parses filenames from filepaths
 def nameSplitter(paths: list):
     if paths:
         themeNames = []
@@ -74,7 +58,7 @@ def validateTheme(data: dict):
 
     # checks that all options in theme.json file are valid
     for i in range(len(theme_keys)):
-        for option in kitty_theme_options:
+        for option in kitty.kitty_theme_options:
             try:
                 if theme_keys[i] == option:
                     check_theme += 1
@@ -87,64 +71,12 @@ def validateTheme(data: dict):
     else:
         return False
 
-# stores only the lines not listed in line numbers
-def readKitty(filename: str):
-  
-    # grabs the array of line numbers needing to be replaced
-    line_numbers = parseKitty(filename)
-    line_numbers_array = line_numbers.values()
-
-    data = open(filename, 'rt')
-    
-    #read will return this
-    document = []
-
-    cond = True
-    current_line = 0
-
-    # adds line numbers not listed to array
-    while cond:
-
-        line = data.readline()
-
-        if line and current_line not in line_numbers_array:
-            document.append(line)
-
-        if not line:
-            cond = False
-
-        current_line += 1
-    
-    data.close()
-    return document
-
-# adds new theme values in a constructed string to the array
-def update(new_kitty: list, new_theme: dict):
-    
-    new_kitty = new_kitty
-
-    keys = new_theme.keys()
-
-    for key in keys: 
-        string = key + ' ' + new_theme[key] + '\n'
-        new_kitty.append(string)
-
-    
-    return new_kitty
-    
-def replace(filename: str, data: list):
-
-    kitty = open(filename, 'wt')
-    kitty.writelines(data)
-    kitty.close()
-
-
-if __name__ == "__main__":
-
-    # print(parseKitty('./theme.conf'))
-    # print(readKitty('./theme.conf'))
-    new_theme = json.load(open('./themes/gruvbox.json'))
-    kitty = update(readKitty('./theme.conf'), new_theme)
-
-    replace('./theme.conf', kitty)
-
+def startSelect(data, selected):
+    if data and selected:
+        for i, value in enumerate(data):
+            print(selected, value)
+            if selected in value:
+               return i
+        return 0
+    else: 
+        return 0
