@@ -5,11 +5,11 @@ kitty_theme_options = ['color0','color1','color2','color3','color4','color5','co
 
 # proof of concept parser that looks through a config file and prints (for now) each matching
 # option
-def parseKitty(filename: str):
+def parseKitty(kitty_conf: str) -> dict:
     
-    theme = open(filename, "rt")
+    kitty = open(kitty_conf, "rt")
 
-    if theme:
+    if kitty:
         cond = True
         line_count = 0
 
@@ -18,7 +18,7 @@ def parseKitty(filename: str):
         # checks all lines for matching theme options and stores line number
         while cond: 
 
-            line = theme.readline()
+            line = kitty.readline()
             option = line.split(' ')[0]
             
             if line:
@@ -27,21 +27,21 @@ def parseKitty(filename: str):
                         color_positions[option] = line_count
                         break
             else:     
-                theme.close()
+                kitty.close()
                 cond = False
 
             line_count += 1
         
-        theme.close()
+        kitty.close()
         return color_positions
 
     else:
-        theme.close()
+        kitty.close()
         return {}
 
 
 # stores only the lines not listed in line numbers
-def readKitty(filename: str):
+def readKitty(filename: str) -> list:
   
     # grabs the array of line numbers needing to be replaced
     line_numbers = parseKitty(filename)
@@ -72,23 +72,23 @@ def readKitty(filename: str):
     return document
 
 # adds new theme values in a constructed string to the array
-def update(new_kitty: list, new_theme: dict):
+def update(new_kitty_conf: list, new_theme: dict) -> list:
     
-    new_kitty = new_kitty
+    new_kitty_conf = new_kitty_conf
 
     keys = new_theme.keys()
 
     for key in keys: 
         string = key + ' ' + new_theme[key] + '\n'
-        new_kitty.append(string)
+        new_kitty_conf.append(string)
 
     
-    return new_kitty
+    return new_kitty_conf
     
-def replace(filename: str, data: list):
+def replace(kitty_conf: str, kitty_conf_array: list):
 
-    kitty = open(filename, 'wt')
-    kitty.writelines(data)
+    kitty = open(kitty_conf, 'wt')
+    kitty.writelines(kitty_conf_array)
     kitty.close()
 
 # gets the index of the selected theme 

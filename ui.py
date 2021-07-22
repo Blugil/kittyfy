@@ -1,5 +1,6 @@
 import npyscreen
 import util
+import kitty
 
 
 # returns a list of filenames from pilepaths
@@ -40,11 +41,18 @@ class App(npyscreen.NPSApp):
 
         F.edit()
 
-        selected = select.get_selected_objects()[0]
+        selected = select.get_selected_objects()
         
         # write selected theme to file
         if len_themes > 0:
             # get_selected_objects returns array and I want a string
             util.writeSelected(selected, 'test.json')
         
-        
+        print(selected)
+        # planned 
+        # read selected theme file
+        # validate it 
+        # data = kitty.readKitty(kitty_conf)
+        # kitty = update(data, selected_theme)
+        # replace(kitty_conf, kitty)
+
