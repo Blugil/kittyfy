@@ -37,17 +37,19 @@ def writeSelected(selected, filename):
         json.dump(selectedTheme, file)
 
 
-def nameSplitter(paths: list):
+def nameSplitter(paths: list) -> dict:
     if paths:
-        themeNames = []
-        for string in paths:
-            themeNames.append(string[string.rindex('/')+1:string.rindex('.')])
-        return themeNames
+        combined = {}
+        for i, string in enumerate(paths):
+            # grabs filename from file path 
+            combined[string[string.rindex('/')+1:string.rindex('.')]] = paths[i]
+        return combined
     else:
-        return []
+        return {}
+
 
 # validates that a theme contains *only* the available kitty theme config options
-def validateTheme(data: dict):
+def validateTheme(data: dict) -> bool:
 
     theme_keys = list(data.keys())
 
@@ -71,7 +73,7 @@ def validateTheme(data: dict):
     else:
         return False
 
-def startSelect(data, selected):
+def startSelect(data: list, selected: str) -> int:
     if data and selected:
         for i, value in enumerate(data):
             print(selected, value)
@@ -80,3 +82,12 @@ def startSelect(data, selected):
         return 0
     else: 
         return 0
+
+if __name__ == "__main__":
+    
+    themes = readDir('./themes')
+    selected = readSelected('./test.json')
+    
+    print(startSelect(themes, selected[0]))
+
+

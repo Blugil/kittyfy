@@ -1,3 +1,4 @@
+import json
 import npyscreen
 import util
 import kitty
@@ -29,7 +30,9 @@ class App(npyscreen.NPSApp):
             value = [0,]
 
         name =  "Select Theme" if len_themes > 0 else "No Themes"
-        values = util.nameSplitter(self.themes)
+        value_keys = util.nameSplitter(self.themes)
+        value_keys = value_keys.keys()
+        value_dict = util.nameSplitter(self.themes)
 
         F = npyscreen.Form(name = "Kitty Theme", lines=20)
         select = F.add(
@@ -37,18 +40,24 @@ class App(npyscreen.NPSApp):
                 max_height=(len_themes + 2), 
                 value = value, 
                 name = name, 
-                values = values)
+                values = value_keys)
 
         F.edit()
 
-        selected = select.get_selected_objects()
+        selected = select.get_selected_objects()[0]
         
         # write selected theme to file
         if len_themes > 0:
             # get_selected_objects returns array and I want a string
             util.writeSelected(selected, 'test.json')
         
-        print(selected)
+        selected_theme = json.load(open(value_dict[selected], 'rt')) 
+
+        if util.validateTheme(selected_theme):
+            data = kitty.readKitty('./kitty.conf')
+            kitty_update = kitty.update(data, selected_theme)
+            kitty.replace('./kitty.conf', kitty_update) 
+        
         # planned 
         # read selected theme file
         # validate it 
