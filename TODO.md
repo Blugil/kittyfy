@@ -4,5 +4,12 @@
 - [x] check to make sure theme is valid(?)
 - [x] determin project structure and flow 
 - [x] implement method of reading/changing the kitty conf file with contents of selected theme
-- [ ] wait until theme is selected by tui before reading the file
+- [x] wait until theme is selected by tui before reading the file
 - [ ] method of checking kitty config file placement ($XDG_CONFIG_HOME and ~/)
+- [ ] theme is only valid if it contains values for all keys
+- [ ] test functionality with genuine kitty files
+
+
+## Extra
+
+- [ ] display color swatches for hovered theme in UI free space towards right

@@ -30,9 +30,9 @@ class App(npyscreen.NPSApp):
             value = [0,]
 
         name =  "Select Theme" if len_themes > 0 else "No Themes"
-        value_keys = util.nameSplitter(self.themes)
-        value_keys = value_keys.keys()
+
         value_dict = util.nameSplitter(self.themes)
+        value_keys = list(value_dict.keys())
 
         F = npyscreen.Form(name = "Kitty Theme", lines=20)
         select = F.add(

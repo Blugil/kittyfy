@@ -37,6 +37,7 @@ def writeSelected(selected, filename):
         json.dump(selectedTheme, file)
 
 
+#takes list of filepaths as strings
 def nameSplitter(paths: list) -> dict:
     if paths:
         combined = {}
@@ -87,6 +88,8 @@ if __name__ == "__main__":
     
     themes = readDir('./themes')
     selected = readSelected('./test.json')
+
+    nameSplitter(themes)
     
     print(startSelect(themes, selected[0]))
 
