@@ -87,7 +87,7 @@ def startSelect(data: list, selected: str) -> int:
 if __name__ == "__main__":
     
     themes = readDir('./themes')
-    selected = readSelected('./test.json')
+    selected = readSelected('./selected.json')
 
     nameSplitter(themes)
     

@@ -49,9 +49,12 @@ class App(npyscreen.NPSApp):
         # write selected theme to file
         if len_themes > 0:
             # get_selected_objects returns array and I want a string
-            util.writeSelected(selected, 'test.json')
-        
-        selected_theme = json.load(open(value_dict[selected], 'rt')) 
+            util.writeSelected(selected, 'selected.json')
+       
+        try:
+            selected_theme = json.load(open(value_dict[selected], 'rt')) 
+        except:
+            selected_theme = {}
 
         if util.validateTheme(selected_theme):
             data = kitty.readKitty('./kitty.conf')

@@ -6,7 +6,7 @@ if __name__ == "__main__":
 
 
     themes = util.readDir('./themes')
-    selected = util.readSelected('./test.json')
+    selected = util.readSelected('./selected.json')
 
     app = ui.App(selected, themes)
     app.run()
